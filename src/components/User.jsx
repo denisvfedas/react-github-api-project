@@ -6,6 +6,21 @@ class User extends React.Component {
         super();
         this.state = {};
     }
+    
+    fetchData() {
+        const GITHUB_API_TOKEN = '?access_token=84dff6ac38e5d88760d530a9ff6f13af260d5ca2';
+        fetch(`https://api.github.com/users/${this.props.params.username}${GITHUB_API_TOKEN}`)
+        .then(response => response.json())
+        .then(
+            user => {
+                // How can we use `this` inside a callback without binding it??
+                // Make sure you understand this fundamental difference with arrow functions!!!
+                this.setState({
+                    user: user
+                });
+            }
+        );
+    }
 
     /*
     This method will be called by React after the first render. It's a perfect place to load
@@ -20,26 +35,24 @@ class User extends React.Component {
     When `render` gets called again, `this.state.user` exists and we get the user info display instead of "LOADING..."
     */
     componentDidMount() {
-        fetch(`https://api.github.com/users/${this.props.params.username}`)
-        .then(response => response.json())
-        .then(
-            user => {
-                // How can we use `this` inside a callback without binding it??
-                // Make sure you understand this fundamental difference with arrow functions!!!
-                this.setState({
-                    user: user
-                });
-            }
-        );
+        this.fetchData();
+    }
+    
+    componentDidUpdate() {
+        //console.log('Old name' + this.state.user.login);
+        //console.log('New name' + this.props.params.username);
+        if(this.state.user.login !== this.props.params.username) {
+            this.fetchData();
+        }
     }
 
     /*
     This method is used as a mapping function. Eventually this could be factored out to its own component.
     */
-    renderStat(stat) {
+    renderStat = (stat) => {
         return (
             <li key={stat.name} className="user-info__stat">
-                <Link to={stat.url}>
+                <Link to={`/users/${this.props.params.username}/${stat.path}`}>
                     <p className="user-info__stat-value">{stat.value}</p>
                     <p className="user-info__stat-name">{stat.name}</p>
                 </Link>
@@ -60,16 +73,19 @@ class User extends React.Component {
         const stats = [
             {
                 name: 'Public Repos',
+                path: 'repos',
                 value: user.public_repos,
                 url: `/user/${this.props.params.username}/repos`
             },
             {
                 name: 'Followers',
+                path: 'followers',
                 value: user.followers,
                 url: `/user/${this.props.params.username}/followers`
             },
             {
                 name: 'Following',
+                path: 'following',
                 value: user.following,
                 url: `/user/${this.props.params.username}/following`
             }
@@ -79,7 +95,7 @@ class User extends React.Component {
         return (
             <div className="user-page">
                 <div className="user-info">
-                    <Link className="user-info__text" to={`/user/${user.login}`}>
+                    <Link className="user-info__text" to={`/users/${user.login}`}>
                         <img className="user-info__avatar" src={user.avatar_url} alt={`${user.login} avatar`}/>
                         <h2 className="user-info__title">{user.login} ({user.name})</h2>
                         <p className="user-info__bio">{user.bio}</p>
@@ -89,6 +105,8 @@ class User extends React.Component {
                         {stats.map(this.renderStat)}
                     </ul>
                 </div>
+                <hr/>
+                {this.props.children}
             </div>
         );
     }

@@ -8,6 +8,34 @@ h1,h2,h3,h4,h5,h6 {
     font-weight: 400;
 }
 
+
+
+
+.list-of {
+    list-style: none;
+}
+
+.list-of img {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-right: 1em;
+}
+
+.list-of li {
+    display: flex;
+    aligne-item: baseline;
+}
+
+.list-of a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+
+
+
 .main-header {
     background-color: #222;
     color: #fff;
@@ -33,6 +61,17 @@ h1,h2,h3,h4,h5,h6 {
 
 
 
+.repos-list {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.ref {
+    text-decoration: none;
+}
+
+
+
 
 .search-page {
     text-align: center;
@@ -49,7 +88,14 @@ h1,h2,h3,h4,h5,h6 {
     background-color: #fff;
     font-size: 20px;
 }
-
+.star-icon{
+    display: flex;
+    justify-content: space-around;
+    margin-left: 1em;
+    border: solid;
+    border-width: thin;
+    width: 3em;
+}
 
 
 
@@ -105,3 +151,9 @@ h1,h2,h3,h4,h5,h6 {
     margin: 0;
     white-space: nowrap;
 }
+
+
+
+
+
+
